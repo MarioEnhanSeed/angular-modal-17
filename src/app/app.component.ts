@@ -1,5 +1,6 @@
 import {
   AfterViewInit,
+  ChangeDetectorRef,
   Component,
   TemplateRef,
   ViewChild,
@@ -16,8 +17,8 @@ import {
 })
 export class AppComponent implements AfterViewInit {
   @ViewChild('modal') public modalTemplateRef!: TemplateRef<any>;
-  @ViewChild('template1') public template1!: TemplateRef<any>;
-  @ViewChild('template2') public template2!: TemplateRef<any>;
+  @ViewChild('template1') public template1?: TemplateRef<any>;
+  @ViewChild('template2') public template2?: TemplateRef<any>;
 
   public selectedTemplate?: TemplateRef<any>;
 
@@ -28,9 +29,13 @@ export class AppComponent implements AfterViewInit {
 
   public modalRef!: ModalRef;
 
-  constructor(private modalService: ModalService) {}
+  constructor(
+    private modalService: ModalService,
+    private cd: ChangeDetectorRef
+  ) {}
   ngAfterViewInit(): void {
     this.selectedTemplate = this.template1;
+    this.cd.detectChanges();
   }
 
   public show() {
