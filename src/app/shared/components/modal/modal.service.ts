@@ -7,6 +7,7 @@ import {
 } from '@angular/core';
 import { ModalConfig } from '../../../interfaces/interface';
 import { ModalComponent } from './modal.component';
+import { BodyInjectorService } from '../../services/body-injector.service';
 
 @Injectable({
   providedIn: 'root',
@@ -16,7 +17,8 @@ export class ModalService {
 
   constructor(
     private resolver: ComponentFactoryResolver,
-    private injector: Injector // Injetor agora é passado pelo construtor
+    private injector: Injector, // Injetor agora é passado pelo construtor
+    private bodyInjectorService: BodyInjectorService
   ) {
     this.componentFactory =
       this.resolver.resolveComponentFactory(ModalComponent);
@@ -26,10 +28,8 @@ export class ModalService {
     const componentRef = this.createComponentRef();
     componentRef.instance.config = modalConfig; // Agora aplicando a configuração corretamente
     console.log(componentRef.instance);
-
-    // Não destrua a referência do componente aqui, pois isso fechará o modal imediatamente
-    // componentRef.destroy();
     console.log('open called');
+    this.bodyInjectorService.stackBeforeAppRoot(componentRef);
     return new ModalRef(componentRef);
   }
 
